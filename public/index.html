@@ -1,315 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Maps App</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 2rem;
-            text-align: center;
-        }
-
-        .header h1 {
-            color: white;
-            font-size: 2rem;
-            font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .map-container {
-            flex: 1;
-            margin: 2rem;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            min-height: 500px;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-            min-height: 500px;
-        }
-
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 1.2rem;
-            text-align: center;
-            z-index: 1000;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .controls {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .control-btn {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .control-btn:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .error-message {
-            background: rgba(255, 255, 255, 0.95);
-            color: #e74c3c;
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 1rem;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .map-container {
-                margin: 1rem;
-                border-radius: 15px;
-            }
-            
-            .controls {
-                top: 10px;
-                left: 10px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🍽️ Food Finder</title>
+  <style>
+    /* ——— GLOBAL RESET & LAYOUT ——— */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100vh;display:flex;flex-direction:column;
+    }
+    /* ——— HEADER & SEARCH ——— */
+    .header{
+      background:rgba(255,255,255,.1);backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.2);padding:1.5rem 2rem;text-align:center;
+    }
+    .header h1{color:#fff;font-size:2rem;font-weight:600;text-shadow:0 2px 4px rgba(0,0,0,.3);margin-bottom:1rem;}
+    .search-container{display:flex;justify-content:center;gap:10px;margin-top:1rem;}
+    #searchInput{
+      padding:12px 20px;font-size:16px;border:none;border-radius:25px;width:300px;
+      background:rgba(255,255,255,.9);backdrop-filter:blur(10px);
+      box-shadow:0 4px 12px rgba(0,0,0,.2);outline:none;transition:.3s;
+    }
+    #searchInput:focus{background:#fff;transform:scale(1.02);box-shadow:0 6px 16px rgba(0,0,0,.3);}
+    .search-btn{
+      padding:12px 20px;background:rgba(255,255,255,.9);border:none;border-radius:50%;
+      cursor:pointer;font-size:16px;transition:.3s;box-shadow:0 4px 12px rgba(0,0,0,.2);
+    }
+    .search-btn:hover{background:#fff;transform:scale(1.1);}
+    /* ——— MAP CONTAINER & CONTROLS ——— */
+    .map-container{flex:1;margin:2rem;border-radius:20px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.2);position:relative;min-height:500px;}
+    #map{width:100%;height:100%;min-height:500px;}
+    .loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:1.2rem;text-align:center;z-index:1000;}
+    .spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,.3);border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;}
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    .controls{position:absolute;top:20px;left:20px;z-index:1000;display:flex;flex-direction:column;gap:10px;}
+    .control-btn{
+      background:rgba(255,255,255,.9);border:none;border-radius:8px;padding:10px 15px;
+      cursor:pointer;font-size:14px;font-weight:500;transition:.3s;box-shadow:0 4px 12px rgba(0,0,0,.2);
+    }
+    .control-btn:hover{background:#fff;transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.3);}
+    /* ——— FILTERS PANEL ——— */
+    .filters-panel{display:none;position:absolute;right:20px;top:20px;z-index:1000;width:280px;
+      background:#fff;border-radius:15px;padding:1rem 1.25rem;box-shadow:0 8px 24px rgba(0,0,0,.25);}
+    .filters-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;}
+    .close-filters{background:none;border:none;font-size:1.1rem;cursor:pointer;}
+    .filter-group{margin-bottom:.8rem;font-size:.9rem;}
+    .filter-group label{display:block;margin-bottom:.25rem;font-weight:600;}
+    .filter-actions{display:flex;justify-content:space-between;margin-top:.8rem;}
+    .filter-btn{padding:.5rem 1rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.9rem;}
+    .apply{background:#667eea;color:#fff;}
+    .reset{background:#eee;}
+    /* ——— RESULTS PANEL ——— */
+    .results-panel{display:none;position:absolute;bottom:0;left:0;right:0;max-height:45%;overflow-y:auto;
+      background:#fff;border-top-left-radius:15px;border-top-right-radius:15px;box-shadow:0 -4px 16px rgba(0,0,0,.3);}
+    .results-header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;border-bottom:1px solid #eee;}
+    .close-results{background:none;border:none;font-size:1.1rem;cursor:pointer;}
+    .results-list{padding:.75rem 1rem;}
+    .result-item{padding:.6rem 0;border-bottom:1px solid #eee;font-size:.9rem;}
+    .result-item:last-child{border-bottom:none;}
+    .error-message{background:rgba(255,255,255,.95);color:#e74c3c;padding:1rem;border-radius:10px;margin:1rem;text-align:center;font-weight:500;}
+    @media(max-width:768px){
+      .header{padding:1rem}.header h1{font-size:1.5rem}
+      .map-container{margin:1rem;border-radius:15px}
+      .controls{top:10px;left:10px}
+      .filters-panel{width:85%;right:7.5%}
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>My Maps Application</h1>
+  <!-- ————————— HEADER ————————— -->
+  <div class="header">
+    <h1>🍽️ Food Finder</h1>
+    <div class="search-container">
+      <input id="searchInput" type="text" placeholder="Search for restaurants, cafés, food…" />
+      <button class="search-btn" onclick="performSearch()">🔍</button>
+    </div>
+  </div>
+
+  <!-- ————————— MAP & UI ————————— -->
+  <div class="map-container">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <div>Loading Map…</div>
     </div>
 
-    <div class="map-container">
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <div>Loading Map...</div>
-        </div>
-        
-        <div class="controls">
-            <button class="control-btn" onclick="goToCurrentLocation()">📍 My Location</button>
-            <button class="control-btn" onclick="toggleMapType()">🗺️ Toggle View</button>
-        </div>
-        
-        <div id="map"></div>
+    <!-- quick-access buttons -->
+    <div class="controls">
+      <button class="control-btn" onclick="goToCurrentLocation()">📍 My Location</button>
+      <button class="control-btn" onclick="toggleMapType()">🗺️ Toggle View</button>
+      <button class="control-btn" onclick="toggleFilters()">🔧 Filters</button>
     </div>
 
-    <script>
-        let map;
-        let currentMapType = 'roadmap';
-        const mapTypes = ['roadmap', 'satellite', 'hybrid', 'terrain'];
-        let currentTypeIndex = 0;
+    <!-- filters panel -->
+    <div id="filtersPanel" class="filters-panel">
+      <div class="filters-header">
+        <h3>🔧 Filter Restaurants</h3>
+        <button class="close-filters" onclick="toggleFilters()">✕</button>
+      </div>
 
-        // Initialize the map
-        function initMap() {
-            const loading = document.getElementById('loading');
-            
-            try {
-                // Default location (New York City)
-                const defaultLocation = { lat: 40.7128, lng: -74.0060 };
-                
-                map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 13,
-                    center: defaultLocation,
-                    mapTypeId: currentMapType,
-                    styles: [
-                        {
-                            featureType: 'all',
-                            elementType: 'geometry.fill',
-                            stylers: [{ saturation: -10 }]
-                        }
-                    ],
-                    mapTypeControl: true,
-                    streetViewControl: true,
-                    fullscreenControl: true,
-                    zoomControl: true
-                });
+      <div class="filter-group">
+        <label>⭐ Minimum Rating</label>
+        <input id="minRating" type="range" min="1" max="5" value="3" step=".1" oninput="updateSlider('ratingValue',this.value);updateFilters()" />
+        <span id="ratingValue">3.0</span>
+      </div>
 
-                // Add a marker at the default location
-                const marker = new google.maps.Marker({
-                    position: defaultLocation,
-                    map: map,
-                    title: 'Welcome to New York!',
-                    animation: google.maps.Animation.BOUNCE
-                });
+      <div class="filter-group">
+        <label>📝 Minimum Reviews</label>
+        <input id="minReviews" type="range" min="0" max="1000" value="10" step="10" oninput="updateSlider('reviewsValue',this.value);updateFilters()" />
+        <span id="reviewsValue">10</span>
+      </div>
 
-                // Info window for the marker
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="padding: 10px;">
-                            <h3 style="margin: 0 0 10px 0; color: #333;">Welcome!</h3>
-                            <p style="margin: 0; color: #666;">This is your Google Maps web app. Click "My Location" to see where you are!</p>
-                        </div>
-                    `
-                });
+      <div class="filter-group">
+        <label>🏆 Sort by</label>
+        <select id="sortBy" onchange="updateFilters()">
+          <option value="rating">Highest Rating</option>
+          <option value="reviews">Most Reviews</option>
+          <option value="distance">Closest</option>
+          <option value="safety">Food-Safety Score</option>
+        </select>
+      </div>
 
-                marker.addListener('click', () => {
-                    infoWindow.open(map, marker);
-                });
+      <div class="filter-group">
+        <label>🍴 Cuisine Type</label>
+        <select id="cuisineFilter" onchange="updateFilters()">
+          <option value="">All Cuisines</option>
+          <option value="italian">Italian</option>
+          <option value="chinese">Chinese</option>
+          <option value="mexican">Mexican</option>
+          <option value="indian">Indian</option>
+          <option value="japanese">Japanese</option>
+          <option value="american">American</option>
+          <option value="mediterranean">Mediterranean</option>
+        </select>
+      </div>
 
-                // Hide loading spinner
-                loading.style.display = 'none';
+      <div class="filter-group">
+        <label>⚠️ Hide Risky Places</label>
+        <input id="hideFoodPoisoning" type="checkbox" checked onchange="updateFilters()" />
+        <span class="tooltip">Hide places mentioning food poisoning</span>
+      </div>
 
-                // Try to get user's location
-                getCurrentLocation();
+      <div class="filter-actions">
+        <button class="filter-btn apply" onclick="toggleFilters()">Done</button>
+        <button class="filter-btn reset" onclick="resetFilters()">Reset</button>
+      </div>
+    </div>
 
-            } catch (error) {
-                console.error('Error initializing map:', error);
-                showError('Failed to load the map. Please check your API key.');
+    <!-- results panel -->
+    <div id="resultsPanel" class="results-panel">
+      <div class="results-header">
+        <h3>🍽️ Nearby Restaurants</h3>
+        <button class="close-results" onclick="toggleResults()">✕</button>
+      </div>
+      <div id="resultsList" class="results-list"></div>
+    </div>
+
+    <div id="map"></div>
+  </div>
+
+  <!-- ————————— CORE SCRIPT ————————— -->
+  <script>
+    /* ========= GLOBAL STATE ========= */
+    let map, autocomplete, markers = [], latestPlaces = [];
+    const mapTypes = ['roadmap','satellite','hybrid','terrain'];
+    let currentTypeIndex = 0;
+
+    /* ========= INIT MAP ========= */
+    function initMap() {
+      const loading = document.getElementById('loading');
+      const defaultLocation = {lat:40.7128,lng:-74.0060}; // NYC
+      map = new google.maps.Map(document.getElementById('map'),{
+        zoom:13,center:defaultLocation,mapTypeId:'roadmap',
+        styles:[{featureType:'all',elementType:'geometry.fill',stylers:[{saturation:-10}]}],
+        mapTypeControl:true,streetViewControl:true,fullscreenControl:true,zoomControl:true
+      });
+      attachAutocomplete();
+      getCurrentLocation();
+      loading.style.display='none';
+    }
+
+    /* ========= AUTOCOMPLETE ========= */
+    function attachAutocomplete() {
+      const input = document.getElementById('searchInput');
+      autocomplete = new google.maps.places.Autocomplete(input,{types:['establishment']});
+      autocomplete.addListener('place_changed',()=> {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+        map.panTo(place.geometry.location); map.setZoom(15);
+        performSearch();
+      });
+    }
+
+    /* ========= LOCATION HELPERS ========= */
+    function getCurrentLocation(){
+      if(!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(pos=>{
+        const loc={lat:pos.coords.latitude,lng:pos.coords.longitude};
+        map.setCenter(loc);
+        new google.maps.Marker({map,position:loc,title:'You are here',icon:{
+          url:'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ff6b6b"><circle cx="12" cy="12" r="8"/></svg>',
+          scaledSize:new google.maps.Size(24,24)
+        }});
+      });
+    }
+    function goToCurrentLocation(){getCurrentLocation();}
+
+    /* ========= MAP TYPE TOGGLE ========= */
+    function toggleMapType(){
+      currentTypeIndex=(currentTypeIndex+1)%mapTypes.length;
+      map.setMapTypeId(mapTypes[currentTypeIndex]);
+    }
+
+    /* ========= NEARBY SEARCH ========= */
+    async function performSearch() {
+      const service=new google.maps.places.PlacesService(map);
+      const center=map.getCenter();
+      const keyword=document.getElementById('searchInput').value||'restaurant';
+      const request={location:center,radius:2000,keyword,type:['restaurant']};
+
+      service.nearbySearch(request, async (results,status)=>{
+        if(status!==google.maps.places.PlacesServiceStatus.OK){return showError('No places found.');}
+        const enriched=await Promise.all(results.map(addReviewStats));
+        latestPlaces=enriched;
+        displayResults(applyClientFilters(enriched));
+      });
+    }
+
+    /* --- Enrich each place w/ review stats (food-poisoning mentions) --- */
+    function addReviewStats(place){
+      return new Promise(res=>{
+        const service=new google.maps.places.PlacesService(map);
+        service.getDetails({placeId:place.place_id,fields:['rating','user_ratings_total','reviews','types']},
+          (det,stat)=>{
+            if(stat===google.maps.places.PlacesServiceStatus.OK && det.reviews){
+              place.rating=det.rating; place.user_ratings_total=det.user_ratings_total;
+              place.types=det.types;
+              place.poisoningMentions=det.reviews.filter(r=>/food poisoning|vomit|sick|stomach|diarrhea/i.test(r.text)).length;
             }
-        }
+            res(place);
+          });
+      });
+    }
 
-        // Get user's current location
-        function getCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        
-                        // Add marker for user location
-                        new google.maps.Marker({
-                            position: userLocation,
-                            map: map,
-                            title: 'You are here',
-                            icon: {
-                                url: 'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ff6b6b"><circle cx="12" cy="12" r="8"/></svg>',
-                                scaledSize: new google.maps.Size(24, 24)
-                            }
-                        });
-                    },
-                    (error) => {
-                        console.log('Geolocation error:', error);
-                    }
-                );
-            }
-        }
+    /* ========= FILTERING & SORTING ========= */
+    function applyClientFilters(arr){
+      const minRating=parseFloat(document.getElementById('minRating').value);
+      const minReviews=parseInt(document.getElementById('minReviews').value,10);
+      const hidePoison=document.getElementById('hideFoodPoisoning').checked;
+      const cuisine=document.getElementById('cuisineFilter').value;
+      const sortBy=document.getElementById('sortBy').value;
 
-        // Go to current location
-        function goToCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        map.setCenter(userLocation);
-                        map.setZoom(15);
-                    },
-                    (error) => {
-                        alert('Unable to get your location. Please enable location services.');
-                    }
-                );
-            } else {
-                alert('Geolocation is not supported by this browser.');
-            }
-        }
+      return arr.filter(p=>
+          (p.rating||0) >= minRating &&
+          (p.user_ratings_total||0) >= minReviews &&
+          (!hidePoison || (p.poisoningMentions||0)===0) &&
+          (!cuisine || (p.types||[]).some(t=>t.includes(cuisine)))
+        ).sort((a,b)=>{
+          if(sortBy==='rating')  return (b.rating||0)-(a.rating||0);
+          if(sortBy==='reviews') return (b.user_ratings_total||0)-(a.user_ratings_total||0);
+          if(sortBy==='distance'){
+            const distA=google.maps.geometry.spherical.computeDistanceBetween(a.geometry.location,map.getCenter());
+            const distB=google.maps.geometry.spherical.computeDistanceBetween(b.geometry.location,map.getCenter());
+            return distA-distB;
+          }
+          if(sortBy==='safety')  return (a.poisoningMentions||0)-(b.poisoningMentions||0);
+          return 0;
+        });
+    }
 
-        // Toggle map type
-        function toggleMapType() {
-            currentTypeIndex = (currentTypeIndex + 1) % mapTypes.length;
-            currentMapType = mapTypes[currentTypeIndex];
-            map.setMapTypeId(currentMapType);
-        }
+    function updateFilters(){ if(latestPlaces.length) displayResults(applyClientFilters(latestPlaces)); }
+    function resetFilters(){
+      document.getElementById('minRating').value=3; document.getElementById('ratingValue').textContent='3.0';
+      document.getElementById('minReviews').value=10; document.getElementById('reviewsValue').textContent='10';
+      document.getElementById('cuisineFilter').value='';
+      document.getElementById('hideFoodPoisoning').checked=true;
+      document.getElementById('sortBy').value='rating';
+      updateFilters();
+    }
 
-        // Show error message
-        function showError(message) {
-            const loading = document.getElementById('loading');
-            loading.innerHTML = `<div class="error-message">${message}</div>`;
-        }
+    /* ========= RESULTS RENDERING ========= */
+    function clearMarkers(){markers.forEach(m=>m.setMap(null));markers=[];}
+    function displayResults(places){
+      clearMarkers();
+      const list=document.getElementById('resultsList'); list.innerHTML='';
+      const bounds=new google.maps.LatLngBounds();
+      places.forEach(p=>{
+        const iconUrl=p.poisoningMentions ? 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+                                          : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+        const m=new google.maps.Marker({map,position:p.geometry.location,title:p.name,icon:iconUrl});
+        markers.push(m); bounds.extend(p.geometry.location);
+        list.insertAdjacentHTML('beforeend',`
+          <div class="result-item">
+            <strong>${p.name}</strong><br>
+            ⭐ ${(p.rating||'N/A')} (${p.user_ratings_total||0})<br>
+            Food-poisoning mentions: ${p.poisoningMentions||0}
+          </div>`);
+      });
+      if(!bounds.isEmpty()) map.fitBounds(bounds);
+      toggleResults(true);
+    }
 
-        // Handle API load errors
-        window.gm_authFailure = function() {
-            showError('Google Maps API authentication failed. Please check your API key.');
-        };
-    </script>
+    /* ========= PANELS & UI HELPERS ========= */
+    function toggleFilters(){const el=document.getElementById('filtersPanel');el.style.display=el.style.display==='block'?'none':'block';}
+    function toggleResults(forceOpen=null){
+      const el=document.getElementById('resultsPanel');
+      if(forceOpen===true) el.style.display='block';
+      else if(forceOpen===false) el.style.display='none';
+      else el.style.display=el.style.display==='block'?'none':'block';
+    }
+    function updateSlider(id,val){document.getElementById(id).textContent=val;}
 
-    <!-- Load Google Maps API with key from server -->
-    <script>
-        // Fetch API key from server endpoint
-        async function loadGoogleMaps() {
-            try {
-                const response = await fetch('/api/maps-config');
-                const config = await response.json();
-                
-                const script = document.createElement('script');
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${config.apiKey}&callback=initMap`;
-                script.async = true;
-                script.defer = true;
-                script.onerror = () => showError('Failed to load Google Maps API');
-                document.head.appendChild(script);
-            } catch (error) {
-                console.error('Error loading Maps API:', error);
-                showError('Failed to load map configuration');
-            }
-        }
+    /* ========= ERROR HANDLING ========= */
+    function showError(msg){
+      const load=document.getElementById('loading');
+      load.innerHTML=`<div class="error-message">${msg}</div>`;
+    }
+    window.gm_authFailure=function(){showError('Google Maps API authentication failed.');};
 
-        // Load the maps API when page loads
-        document.addEventListener('DOMContentLoaded', loadGoogleMaps);
-    </script>
+  </script>
+
+  <!-- ————————— LOAD GOOGLE MAPS (key fetched from backend) ————————— -->
+  <script>
+    async function loadGoogleMaps(){
+      try{
+        const res=await fetch('/api/maps-config'); const {apiKey}=await res.json();
+        const s=document.createElement('script');
+        s.src=`https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=places,geometry`;
+        s.async=true;s.defer=true;
+        s.onerror=()=>showError('Failed to load Google Maps API');
+        document.head.appendChild(s);
+      }catch(e){console.error(e);showError('Failed to load map configuration');}
+    }
+    document.addEventListener('DOMContentLoaded',loadGoogleMaps);
+  </script>
 </body>
 </html>
