@@ -101,7 +101,7 @@ class MapManager {
             };
         }
 
-        // Calculate the diagonal distance of the current map view
+        // Calculate the dimensions of the current map view
         const ne = bounds.getNorthEast();
         const sw = bounds.getSouthWest();
         
@@ -112,29 +112,36 @@ class MapManager {
         const latDistance = latDiff * 111000;
         const lngDistance = lngDiff * 111000 * Math.cos(ne.lat() * Math.PI / 180); // Adjust for latitude
         
-        // Calculate diagonal distance
-        const diagonalDistance = Math.sqrt(latDistance * latDistance + lngDistance * lngDistance);
+        // Use the smaller dimension as the base radius to ensure we stay within visible bounds
+        // This prevents searching areas that are outside the current map view
+        const baseRadius = Math.min(latDistance, lngDistance) / 2;
         
-        // Use half the diagonal as the base radius (covers the visible area)
-        const baseRadius = Math.max(diagonalDistance / 2, 1000); // Minimum 1km
+        // Apply additional safety factor to ensure we stay well within bounds
+        const safetyFactor = 0.7; // Use 70% of the smaller dimension
+        const radius = Math.max(baseRadius * safetyFactor, 500); // Minimum 500m
         
         // Ensure radius is within reasonable bounds
-        const maxRadius = 50000; // 50km max
-        const minRadius = 1000;  // 1km min
-        const radius = Math.min(Math.max(baseRadius, minRadius), maxRadius);
+        const maxRadius = 25000; // 25km max (reduced from 50km)
+        const minRadius = 500;   // 500m min (reduced from 1km)
+        const finalRadius = Math.min(Math.max(radius, minRadius), maxRadius);
         
         console.log('Map bounds analysis:', {
             bounds: {
                 ne: { lat: ne.lat(), lng: ne.lng() },
                 sw: { lat: sw.lat(), lng: sw.lng() }
             },
-            diagonalDistance: Math.round(diagonalDistance),
-            calculatedRadius: Math.round(radius)
+            dimensions: {
+                latDistance: Math.round(latDistance),
+                lngDistance: Math.round(lngDistance)
+            },
+            baseRadius: Math.round(baseRadius),
+            safetyFactor: safetyFactor,
+            calculatedRadius: Math.round(finalRadius)
         });
         
         return {
             bounds: bounds,
-            radius: Math.round(radius)
+            radius: Math.round(finalRadius)
         };
     }
 

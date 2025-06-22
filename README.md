@@ -1,266 +1,139 @@
-# FoodFinder - Custom Map Filter Application
+# PlacesFinder 🌍
 
-**This is my first project using cursur AI.**
+A modern, beautiful web application for discovering and filtering places using Google Maps API. Built with vanilla JavaScript, Tailwind CSS, and a modular architecture.
 
-A web application that integrates with Google Maps to provide advanced, custom filtering capabilities for location searches. Built with vanilla JavaScript, Google Maps API, and Firebase for data storage.
+## ✨ Features
 
-## Features
+- **Interactive Google Maps Integration** - Real-time map navigation and place discovery
+- **Advanced Filtering System** - Filter by rating, price level, keywords, and place types
+- **Smart Search** - Map-based radius calculation for optimal results
+- **Beautiful Modern UI** - Glass morphism design with smooth animations
+- **Real-time Data** - Live place information with icons, ratings, and reviews
+- **Responsive Design** - Works perfectly on desktop and mobile devices
 
-### Core Functionality
-- **Interactive Google Map**: Full-featured map with pan, zoom, and search capabilities
-- **Global Search**: Search for any place worldwide using Google Places Autocomplete
-- **Real-time Results**: Dynamic marker display with instant search results
-- **Custom Filters**: Advanced filtering beyond standard map applications
-
-### Custom Filtering System
-1. **Weighted Average Rating Filter**
-   - Formula: `(Average Rating) × (Number of Reviewers)`
-   - Find highly-rated and well-reviewed places
-   - Configurable minimum threshold
-
-2. **Keyword Incidence Filter**
-   - Search for specific keywords in reviews (e.g., "food poisoning")
-   - Filter places based on keyword frequency
-   - Configurable keyword and maximum count threshold
-
-### User Interface
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-- **Modern UI**: Built with Tailwind CSS for a clean, professional look
-- **Interactive Markers**: Color-coded markers based on filter criteria
-- **Detailed Info Windows**: Click markers to view comprehensive place information
-
-## Technical Stack
-
-- **Frontend**: Vanilla JavaScript (ES6+)
-- **Maps**: Google Maps JavaScript API
-- **Places**: Google Places API
-- **Database**: Firebase Firestore
-- **Authentication**: Firebase Authentication (Anonymous)
-- **Styling**: Tailwind CSS
-- **Future**: Gemini API integration for advanced review analysis
-
-## Setup Instructions
+## 🚀 Quick Start
 
 ### Prerequisites
-- Google Cloud Platform account
-- Firebase project
-- Modern web browser
+- Node.js (v14 or higher)
+- Google Maps API key
+- Firebase project (optional, for enhanced features)
 
-### 1. Google Maps API Setup
+### Installation
 
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd PlacesFinder
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure your API keys**
+   - Copy `js/config.template.js` to `js/config.js`
+   - Add your Google Maps API key
+   - Configure Firebase settings (optional)
+
+4. **Start the server**
+   ```bash
+   npm start
+   ```
+
+5. **Open your browser**
+   Navigate to `http://localhost:8000`
+
+## 🛠️ Configuration
+
+### Google Maps API Setup
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select an existing one
+2. Create a new project or select existing one
 3. Enable the following APIs:
    - Maps JavaScript API
    - Places API
-4. Create credentials (API Key)
-5. Restrict the API key to your domain for security
+   - Geocoding API
+4. Create credentials (API key)
+5. Add the API key to `js/config.js`
 
-### 2. Firebase Setup
+### Firebase Setup (Optional)
+1. Create a Firebase project
+2. Enable Firestore and Authentication
+3. Add Firebase config to `js/firebase-config.js`
 
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project or select an existing one
-3. Enable Firestore Database
-4. Enable Authentication (Anonymous sign-in)
-5. Get your Firebase configuration
+## 📁 Project Structure
 
-### 3. Application Configuration
-
-1. **Create Configuration File**:
-   ```bash
-   # Copy the template to create your config file
-   cp js/config.template.js js/config.js
-   ```
-
-2. **Update Configuration**:
-   - Open `js/config.js`
-   - Replace the placeholder values with your actual API keys:
-   ```javascript
-   const CONFIG = {
-       GOOGLE_MAPS_API_KEY: "your-google-maps-api-key",
-       FIREBASE_CONFIG: {
-           apiKey: "your-firebase-api-key",
-           authDomain: "your-project-id.firebaseapp.com",
-           projectId: "your-project-id",
-           storageBucket: "your-project-id.appspot.com",
-           messagingSenderId: "your-sender-id",
-           appId: "your-app-id"
-       },
-       // ... other settings
-   };
-   ```
-
-### 4. Firestore Security Rules
-
-Set up Firestore security rules to allow read/write access:
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /places/{placeId} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
+```
+PlacesFinder/
+├── index.html              # Main HTML file
+├── server.js               # Express server
+├── package.json            # Dependencies and scripts
+├── js/
+│   ├── app.js              # Main application controller
+│   ├── config.js           # Configuration settings
+│   ├── map-manager.js      # Google Maps integration
+│   ├── search-service.js   # Places API search logic
+│   ├── filter-manager.js   # Filtering and sorting
+│   ├── ui-manager.js       # User interface management
+│   ├── data-enricher.js    # Data enrichment and processing
+│   └── firebase-config.js  # Firebase configuration
+└── README.md               # This file
 ```
 
-### 5. Running the Application
+## 🎯 Core Features
 
-1. **Quick Start** (Recommended):
-   ```bash
-   ./quick-start.sh
-   ```
+### Smart Filtering
+- **Weighted Rating Filter** - Filter by (rating × review count)
+- **Keyword Search** - Find places based on review content
+- **Price Level Filter** - Filter by cost (💰 to 💰💰💰💰)
+- **Place Type Selection** - Choose from restaurants, cafes, bars, etc.
 
-2. **Manual Setup**:
-   ```bash
-   # Start server
-   node server.js
-   ```
+### Advanced Search
+- **Map-Based Radius** - Automatically calculates search radius based on map view
+- **Multiple Search Strategies** - Uses different radius sizes for comprehensive results
+- **Fallback Search** - Text-based search when nearby search fails
 
-3. **Production Deployment**:
-   - Deploy to any static hosting service (Netlify, Vercel, GitHub Pages, etc.)
-   - Ensure your domain is added to Google Maps API key restrictions
+### Beautiful Interface
+- **Glass Morphism Design** - Modern backdrop blur effects
+- **Gradient Accents** - Beautiful color schemes
+- **Smooth Animations** - Professional transitions and micro-interactions
+- **Responsive Layout** - Works on all device sizes
 
-## Security Features
+## 🔧 API Endpoints
 
-### 🔒 Secure Configuration Management
-- **Separate Config Files**: API keys are stored in `js/config.js` (gitignored)
-- **Template System**: Use `js/config.template.js` as a starting point
-- **No Hardcoded Keys**: API keys are never committed to version control
-- **Environment Ready**: Easy to switch between development and production configs
+- `GET /` - Main application
+- `GET /health` - Health check endpoint
+- `GET /js/*` - Static JavaScript files
 
-### 🛡️ API Key Protection
-- Configuration files are excluded from Git
-- Template files provided for easy setup
-- Clear documentation on where to get API keys
-- Security best practices included
+## 🎨 Customization
 
-## Usage Guide
+### Styling
+The app uses Tailwind CSS with custom configurations. You can modify:
+- Color schemes in `index.html` (Tailwind config)
+- Custom CSS classes in the `<style>` section
+- Component styling in individual modules
 
-### Basic Search
-1. Enter a location or place name in the search bar
-2. Use autocomplete suggestions or press Enter
-3. View results as markers on the map
-4. Click markers to see detailed information
+### Functionality
+- Add new place types in `search-service.js`
+- Modify filter logic in `filter-manager.js`
+- Customize UI components in `ui-manager.js`
 
-### Applying Custom Filters
+## 🚀 Deployment
 
-#### Weighted Average Rating Filter
-1. Check "Enable this filter" for Weighted Average Rating
-2. Set your minimum threshold (default: 100)
-3. Click "Apply Filters"
-4. Results will show only places meeting the criteria
-
-#### Keyword Incidence Filter
-1. Check "Enable this filter" for Keyword Incidence
-2. Enter your keyword (default: "food poisoning")
-3. Set maximum count threshold (default: 5)
-4. Click "Apply Filters"
-5. Results will exclude places with too many keyword occurrences
-
-### Marker Color Coding
-- **Green with Star**: High weighted rating (>200)
-- **Red with Exclamation**: High keyword count (>5)
-- **Blue with Pin**: Standard places
-
-## Data Structure
-
-### Firestore Collections
-
-#### `places/{placeId}`
-```javascript
-{
-  reviews: [
-    "Great food and service!",
-    "Amazing atmosphere and friendly staff.",
-    // ... more reviews
-  ],
-  customRating: 4.2,
-  lastUpdated: "2024-01-15T10:30:00Z"
-}
+### Local Development
+```bash
+npm run dev
 ```
 
-### Place Object Structure
-```javascript
-{
-  name: "Restaurant Name",
-  geometry: { location: { lat, lng } },
-  formatted_address: "123 Main St, City, State",
-  rating: 4.5,
-  user_ratings_total: 150,
-  place_id: "unique_google_place_id",
-  customData: { /* Firestore data */ },
-  weightedRating: 675, // rating × user_ratings_total
-  keywordCount: 2 // occurrences of search keyword
-}
+### Production
+```bash
+npm start
 ```
 
-## Configuration Options
+### Environment Variables
+- `PORT` - Server port (default: 8000)
 
-### Application Settings
-All settings can be customized in `js/config.js`:
-
-```javascript
-APP_CONFIG: {
-    defaultSearchRadius: 5000,        // Search radius in meters
-    defaultMapCenter: { lat, lng },   // Default map center
-    defaultZoom: 12,                  // Default zoom level
-    defaultWeightedRatingThreshold: 100,  // Default filter threshold
-    defaultKeyword: "food poisoning",     // Default keyword
-    defaultKeywordThreshold: 5,           // Default keyword threshold
-    highWeightedRatingThreshold: 200,     // Green marker threshold
-    highKeywordCountThreshold: 5          // Red marker threshold
-}
-```
-
-## Future Enhancements
-
-### Planned Features
-- **User Accounts**: Email/password authentication
-- **Saved Places**: Bookmark favorite locations
-- **Custom Filter Presets**: Save and reuse filter combinations
-- **Advanced Review Analysis**: Gemini API integration for sentiment analysis
-- **Community Features**: User-contributed reviews and ratings
-- **Export Functionality**: Download filtered results
-
-### LLM Integration (Gemini API)
-- Sentiment analysis of reviews
-- Topic extraction and categorization
-- Automatic issue identification (noise, service quality, etc.)
-- Smart filter suggestions based on review content
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Map Not Loading**
-   - Check Google Maps API key in `js/config.js`
-   - Verify API key restrictions
-   - Check browser console for errors
-
-2. **Search Not Working**
-   - Ensure Places API is enabled
-   - Check API key permissions
-   - Verify billing is set up for Google Cloud project
-
-3. **Firebase Connection Issues**
-   - Verify Firebase configuration in `js/config.js`
-   - Check Firestore security rules
-   - Ensure authentication is properly configured
-
-4. **Configuration Issues**
-   - Ensure `js/config.js` exists (copy from template if needed)
-   - Check that all API keys are properly set
-   - Verify file permissions
-
-### Browser Compatibility
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -268,21 +141,17 @@ APP_CONFIG: {
 4. Test thoroughly
 5. Submit a pull request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Support
+## 🙏 Acknowledgments
 
-For support and questions:
-- Check the troubleshooting section
-- Review Google Maps API documentation
-- Consult Firebase documentation
-- Open an issue on GitHub
-
-## Acknowledgments
-
-- Google Maps Platform for mapping services
+- Google Maps API for location services
+- Tailwind CSS for beautiful styling
 - Firebase for backend services
-- Tailwind CSS for styling framework
-- Community contributors and testers 
+- The open-source community for inspiration
+
+---
+
+**PlacesFinder** - Discover amazing places around the world! 🌍✨ 

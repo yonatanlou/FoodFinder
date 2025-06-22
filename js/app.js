@@ -1,7 +1,7 @@
-// FoodFinder Application - Main Controller
+// PlacesFinder Application - Main Controller
 // This is the simplified main app that coordinates all modules
 
-class FoodFinderApp {
+class PlacesFinderApp {
     constructor() {
         this.config = CONFIG; // Use config from config.js
         this.mapManager = null;
@@ -15,7 +15,7 @@ class FoodFinderApp {
 
     async init() {
         try {
-            console.log('Initializing FoodFinder app...');
+            console.log('Initializing PlacesFinder app...');
             
             // Load Google Maps API
             await this.loadGoogleMapsAPI();
@@ -32,7 +32,7 @@ class FoodFinderApp {
             // Setup autocomplete
             this.searchService.setupAutocomplete();
             
-            console.log('FoodFinder app initialized successfully');
+            console.log('PlacesFinder app initialized successfully');
             this.uiManager.showSuccess('Map loaded successfully!');
         } catch (error) {
             console.error('App initialization error:', error);
@@ -71,12 +71,12 @@ class FoodFinderApp {
 
             // Load Google Maps API dynamically
             const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_MAPS_API_KEY}&libraries=places&callback=initFoodFinderApp`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_MAPS_API_KEY}&libraries=places&callback=initPlacesFinderApp`;
             script.async = true;
             script.defer = true;
             
             // Create global callback function
-            window.initFoodFinderApp = () => {
+            window.initPlacesFinderApp = () => {
                 console.log('Google Maps API loaded successfully');
                 console.log('Google Maps object:', !!google);
                 console.log('Google Maps Maps object:', !!google.maps);
@@ -250,7 +250,7 @@ class FoodFinderApp {
 // Initialize the app when the page loads
 let app;
 document.addEventListener('DOMContentLoaded', () => {
-    app = new FoodFinderApp();
+    app = new PlacesFinderApp();
 });
 
 // Make app available globally for debugging

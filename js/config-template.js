@@ -1,4 +1,4 @@
-// Configuration Template for FoodFinder
+// Configuration Template for PlacesFinder
 // Copy this file to js/firebase-config.js and update with your actual values
 
 // Google Maps API Configuration
