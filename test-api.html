@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - FoodFinder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .test-container {
+            height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Google Maps API Test</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- API Status -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">API Status</h2>
+                <div id="apiStatus" class="space-y-3">
+                    <div class="flex items-center">
+                        <div id="mapsStatus" class="w-4 h-4 rounded-full bg-gray-300 mr-3"></div>
+                        <span>Maps JavaScript API</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div id="placesStatus" class="w-4 h-4 rounded-full bg-gray-300 mr-3"></div>
+                        <span>Places API</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div id="geocodingStatus" class="w-4 h-4 rounded-full bg-gray-300 mr-3"></div>
+                        <span>Geocoding API</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button id="testSearch" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Test Search
+                    </button>
+                </div>
+                
+                <div id="testResults" class="mt-4 p-3 bg-gray-50 rounded-md text-sm">
+                    <p>Click "Test Search" to test the Places API</p>
+                </div>
+            </div>
+            
+            <!-- Map Test -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Map Test</h2>
+                <div id="testMap" class="test-container border rounded-md"></div>
+            </div>
+        </div>
+        
+        <!-- Console Output -->
+        <div class="mt-6 bg-white rounded-lg shadow-sm border p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Console Output</h2>
+            <div id="consoleOutput" class="bg-gray-900 text-green-400 p-4 rounded-md font-mono text-sm h-64 overflow-y-auto">
+                <div>Loading test page...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Test configuration
+        function log(message) {
+            const consoleOutput = document.getElementById('consoleOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            consoleOutput.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            console.log(message);
+        }
+
+        // Test Google Maps API loading
+        async function testGoogleMapsAPI() {
+            log('Starting Google Maps API test...');
+            
+            if (!CONFIG || !CONFIG.GOOGLE_MAPS_API_KEY) {
+                log('❌ ERROR: No Google Maps API key found in config');
+                return false;
+            }
+            
+            log(`✅ API Key found: ${CONFIG.GOOGLE_MAPS_API_KEY.substring(0, 10)}...`);
+            
+            return new Promise((resolve, reject) => {
+                // Check if already loaded
+                if (typeof google !== 'undefined' && google.maps) {
+                    log('✅ Google Maps already loaded');
+                    resolve(true);
+                    return;
+                }
+                
+                // Load Google Maps API
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places&callback=initTestAPI`;
+                script.async = true;
+                script.defer = true;
+                
+                window.initTestAPI = () => {
+                    log('✅ Google Maps API loaded successfully');
+                    resolve(true);
+                };
+                
+                script.onerror = () => {
+                    log('❌ ERROR: Failed to load Google Maps API');
+                    reject(new Error('Failed to load Google Maps API'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Test individual APIs
+        function testAPIs() {
+            log('Testing individual APIs...');
+            
+            // Test Maps JavaScript API
+            const mapsStatus = document.getElementById('mapsStatus');
+            if (typeof google !== 'undefined' && google.maps) {
+                mapsStatus.className = 'w-4 h-4 rounded-full bg-green-500 mr-3';
+                log('✅ Maps JavaScript API: Working');
+            } else {
+                mapsStatus.className = 'w-4 h-4 rounded-full bg-red-500 mr-3';
+                log('❌ Maps JavaScript API: Not available');
+            }
+            
+            // Test Places API
+            const placesStatus = document.getElementById('placesStatus');
+            if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+                placesStatus.className = 'w-4 h-4 rounded-full bg-green-500 mr-3';
+                log('✅ Places API: Working');
+            } else {
+                placesStatus.className = 'w-4 h-4 rounded-full bg-red-500 mr-3';
+                log('❌ Places API: Not available');
+            }
+            
+            // Test Geocoding API
+            const geocodingStatus = document.getElementById('geocodingStatus');
+            if (typeof google !== 'undefined' && google.maps && google.maps.Geocoder) {
+                geocodingStatus.className = 'w-4 h-4 rounded-full bg-green-500 mr-3';
+                log('✅ Geocoding API: Working');
+            } else {
+                geocodingStatus.className = 'w-4 h-4 rounded-full bg-red-500 mr-3';
+                log('❌ Geocoding API: Not available');
+            }
+        }
+
+        // Test map initialization
+        function testMap() {
+            log('Testing map initialization...');
+            
+            try {
+                const mapElement = document.getElementById('testMap');
+                const map = new google.maps.Map(mapElement, {
+                    center: { lat: 40.7128, lng: -74.0060 },
+                    zoom: 12
+                });
+                
+                log('✅ Map initialized successfully');
+                
+                // Add a test marker
+                new google.maps.Marker({
+                    position: { lat: 40.7128, lng: -74.0060 },
+                    map: map,
+                    title: 'Test Marker'
+                });
+                
+                log('✅ Test marker added');
+                
+            } catch (error) {
+                log(`❌ Map initialization failed: ${error.message}`);
+            }
+        }
+
+        // Test Places search
+        function testPlacesSearch() {
+            log('Testing Places search...');
+            
+            const testResults = document.getElementById('testResults');
+            testResults.innerHTML = '<p>Testing search for "restaurants in New York"...</p>';
+            
+            try {
+                const mapElement = document.getElementById('testMap');
+                const map = new google.maps.Map(mapElement, {
+                    center: { lat: 40.7128, lng: -74.0060 },
+                    zoom: 12
+                });
+                
+                const service = new google.maps.places.PlacesService(map);
+                const request = {
+                    query: 'restaurants in New York',
+                    fields: ['name', 'geometry', 'formatted_address']
+                };
+                
+                service.findPlaceFromQuery(request, (results, status) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                        testResults.innerHTML = `
+                            <p class="text-green-600 font-semibold">✅ Search successful!</p>
+                            <p>Found ${results.length} results</p>
+                            <ul class="mt-2 space-y-1">
+                                ${results.slice(0, 3).map(place => 
+                                    `<li class="text-sm">• ${place.name}</li>`
+                                ).join('')}
+                            </ul>
+                        `;
+                        log(`✅ Places search successful: Found ${results.length} results`);
+                    } else {
+                        testResults.innerHTML = `
+                            <p class="text-red-600 font-semibold">❌ Search failed</p>
+                            <p>Status: ${status}</p>
+                        `;
+                        log(`❌ Places search failed: ${status}`);
+                    }
+                });
+                
+            } catch (error) {
+                testResults.innerHTML = `
+                    <p class="text-red-600 font-semibold">❌ Search error</p>
+                    <p>${error.message}</p>
+                `;
+                log(`❌ Places search error: ${error.message}`);
+            }
+        }
+
+        // Initialize test page
+        async function initTest() {
+            log('Initializing API test...');
+            
+            try {
+                await testGoogleMapsAPI();
+                testAPIs();
+                testMap();
+                
+                // Set up test search button
+                document.getElementById('testSearch').addEventListener('click', testPlacesSearch);
+                
+                log('✅ API test initialization complete');
+                
+            } catch (error) {
+                log(`❌ API test initialization failed: ${error.message}`);
+            }
+        }
+
+        // Start the test when page loads
+        document.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html> 

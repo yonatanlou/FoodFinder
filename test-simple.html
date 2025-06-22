@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test - FoodFinder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .map-container {
+            height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Simple FoodFinder Test</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Search Test -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Search Test</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search for restaurants</label>
+                        <input id="searchInput" type="text" placeholder="e.g., 'restaurants in New York'" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    
+                    <button id="searchButton" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Search
+                    </button>
+                    
+                    <div id="searchResults" class="p-3 bg-gray-50 rounded-md text-sm">
+                        <p>Enter a search term and click Search</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Test -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Map Test</h2>
+                <div id="map" class="map-container border rounded-md"></div>
+            </div>
+        </div>
+        
+        <!-- Results -->
+        <div class="mt-6 bg-white rounded-lg shadow-sm border p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Results</h2>
+            <div id="resultsList" class="space-y-2">
+                <p class="text-gray-500">No results yet</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        let map, markers = [];
+        
+        async function initMap() {
+            // Load Google Maps API
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places&callback=initMapCallback`;
+            script.async = true;
+            document.head.appendChild(script);
+        }
+        
+        window.initMapCallback = function() {
+            // Initialize map
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 40.7128, lng: -74.0060 },
+                zoom: 12
+            });
+            
+            console.log('Map initialized');
+            
+            // Set up search
+            document.getElementById('searchButton').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') performSearch();
+            });
+        };
+        
+        function clearMarkers() {
+            markers.forEach(marker => marker.setMap(null));
+            markers = [];
+        }
+        
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            
+            console.log('Searching for:', query);
+            
+            const service = new google.maps.places.PlacesService(map);
+            
+            // First, find the location
+            service.findPlaceFromQuery({
+                query: query,
+                fields: ['name', 'geometry']
+            }, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+                    const location = results[0].geometry.location;
+                    map.setCenter(location);
+                    map.setZoom(15);
+                    
+                    // Search for nearby restaurants
+                    searchNearby(location);
+                } else {
+                    document.getElementById('searchResults').innerHTML = 
+                        `<p class="text-red-600">No location found for "${query}"</p>`;
+                }
+            });
+        }
+        
+        function searchNearby(location) {
+            const service = new google.maps.places.PlacesService(map);
+            
+            service.nearbySearch({
+                location: location,
+                radius: 5000,
+                type: ['restaurant', 'food']
+            }, (results, status) => {
+                clearMarkers();
+                
+                if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+                    console.log(`Found ${results.length} places`);
+                    
+                    // Display results
+                    const resultsList = document.getElementById('resultsList');
+                    resultsList.innerHTML = results.map((place, index) => `
+                        <div class="p-3 border rounded-md">
+                            <h3 class="font-semibold">${index + 1}. ${place.name}</h3>
+                            <p class="text-sm text-gray-600">${place.vicinity || 'Address not available'}</p>
+                            <p class="text-sm text-gray-500">Rating: ${place.rating || 'N/A'} (${place.user_ratings_total || 0} reviews)</p>
+                        </div>
+                    `).join('');
+                    
+                    // Add markers
+                    results.forEach(place => {
+                        if (place.geometry && place.geometry.location) {
+                            const marker = new google.maps.Marker({
+                                position: place.geometry.location,
+                                map: map,
+                                title: place.name
+                            });
+                            markers.push(marker);
+                        }
+                    });
+                    
+                    document.getElementById('searchResults').innerHTML = 
+                        `<p class="text-green-600">Found ${results.length} places nearby!</p>`;
+                        
+                } else {
+                    document.getElementById('searchResults').innerHTML = 
+                        `<p class="text-red-600">No places found nearby. Status: ${status}</p>`;
+                    document.getElementById('resultsList').innerHTML = 
+                        '<p class="text-gray-500">No results found</p>';
+                }
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html> 
