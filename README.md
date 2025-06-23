@@ -143,16 +143,12 @@ npm start
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
+## Development tasks
+- Make a pro version which uses the pro google places API, where we can fetch more then 5 reviews per place. Then we can use LLM for asking far more interesting questions about the place (is it a hidden gem?, is it a new place?, etc)
+- Make it avaialbe for phone use (maybe an app)
+- Database implementation - saving data for reducing API calls and get more reviews per place.
+- Think of other features that are not restaurant related.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Google Maps API for location services
-- Tailwind CSS for beautiful styling
-- Firebase for backend services
-- The open-source community for inspiration
 
 ---
 
