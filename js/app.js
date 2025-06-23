@@ -71,7 +71,7 @@ class PlacesFinderApp {
 
             // Load Google Maps API dynamically
             const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_MAPS_API_KEY}&libraries=places&callback=initPlacesFinderApp`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_MAPS_API_KEY}&libraries=places&language=en&callback=initPlacesFinderApp`;
             script.async = true;
             script.defer = true;
             

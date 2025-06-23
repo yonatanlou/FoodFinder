@@ -11,6 +11,8 @@ A modern, beautiful web application for discovering and filtering places using G
 - **Real-time Data** - Live place information with icons, ratings, and reviews
 - **Responsive Design** - Works perfectly on desktop and mobile devices
 
+![demo](assets/demo_app.gif)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
