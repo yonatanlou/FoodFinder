@@ -251,7 +251,6 @@ class PlacesFinderApp {
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new PlacesFinderApp();
-});
-
-// Make app available globally for debugging
-window.app = app; 
+    // Make app available globally for debugging and filter toggles
+    window.app = app;
+}); 

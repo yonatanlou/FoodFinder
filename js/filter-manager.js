@@ -39,6 +39,11 @@ class FilterManager {
         });
 
         this.filteredPlaces = this.places.filter(place => {
+            // Always exclude permanently closed places
+            if (place.permanently_closed === true) {
+                return false;
+            }
+
             let passesWeightedRating = true;
             let passesKeyword = true;
             let passesPriceLevel = true;

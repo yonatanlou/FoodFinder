@@ -274,281 +274,316 @@
                     </div>
                     
                     <!-- Filter 1: Weighted Average Rating -->
-                    <div class="mb-8 p-4 bg-white/50 rounded-xl border border-white/30">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                </svg>
+                    <div class="mb-4 p-4 bg-white/50 rounded-xl border border-white/30 filter-section">
+                        <div class="flex items-center justify-between cursor-pointer filter-header" onclick="toggleFilter('weightedRating')">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-800">Weighted Rating</h3>
                             </div>
-                            <h3 class="text-sm font-semibold text-gray-800">Weighted Rating</h3>
+                            <svg class="w-4 h-4 text-gray-500 transform transition-transform filter-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                        <p class="text-xs text-gray-600 mb-4">(Average Rating × Number of Reviewers)</p>
-                        <div class="space-y-3">
-                            <div>
-                                <label for="weightedRatingThreshold" class="block text-xs font-medium text-gray-700 mb-1">
-                                    Minimum Threshold
-                                </label>
-                                <input 
-                                    id="weightedRatingThreshold" 
-                                    type="number" 
-                                    min="0" 
-                                    step="0.1" 
-                                    value="100"
-                                    class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
-                                >
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="weightedRatingEnabled" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="weightedRatingEnabled" class="ml-3 text-sm text-gray-700 font-medium">
-                                    Enable this filter
-                                </label>
+                        <div class="filter-content hidden mt-4">
+                            <p class="text-xs text-gray-600 mb-4">(Average Rating × Number of Reviewers)</p>
+                            <div class="space-y-3">
+                                <div>
+                                    <label for="weightedRatingThreshold" class="block text-xs font-medium text-gray-700 mb-1">
+                                        Minimum Threshold
+                                    </label>
+                                    <input 
+                                        id="weightedRatingThreshold" 
+                                        type="number" 
+                                        min="0" 
+                                        step="0.1" 
+                                        value="100"
+                                        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
+                                    >
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="weightedRatingEnabled" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="weightedRatingEnabled" class="ml-3 text-sm text-gray-700 font-medium">
+                                        Enable this filter
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Filter 2: Keyword Incidence -->
-                    <div class="mb-8 p-4 bg-white/50 rounded-xl border border-white/30">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
+                    <div class="mb-4 p-4 bg-white/50 rounded-xl border border-white/30 filter-section">
+                        <div class="flex items-center justify-between cursor-pointer filter-header" onclick="toggleFilter('keyword')">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-800">Keyword Search</h3>
                             </div>
-                            <h3 class="text-sm font-semibold text-gray-800">Keyword Search</h3>
+                            <svg class="w-4 h-4 text-gray-500 transform transition-transform filter-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                        <p class="text-xs text-gray-600 mb-4">Filter by keyword frequency in reviews</p>
-                        <div class="space-y-3">
-                            <div>
-                                <label for="keywordInput" class="block text-xs font-medium text-gray-700 mb-1">
-                                    Keyword
-                                </label>
-                                <input 
-                                    id="keywordInput" 
-                                    type="text" 
-                                    value="food poisoning"
-                                    placeholder="Enter keyword"
-                                    class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
-                                >
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
+                        <div class="filter-content hidden mt-4">
+                            <p class="text-xs text-gray-600 mb-4">Filter by keyword frequency in reviews (5 Most Relevant reviews)</p>
+                            <div class="space-y-3">
                                 <div>
-                                    <label for="keywordMinThreshold" class="block text-xs font-medium text-gray-700 mb-1">
-                                        Min Count
+                                    <label for="keywordInput" class="block text-xs font-medium text-gray-700 mb-1">
+                                        Keyword
                                     </label>
                                     <input 
-                                        id="keywordMinThreshold" 
-                                        type="number" 
-                                        min="0" 
-                                        value="0"
+                                        id="keywordInput" 
+                                        type="text" 
+                                        value="food poisoning"
+                                        placeholder="Enter keyword"
                                         class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
                                     >
                                 </div>
-                                <div>
-                                    <label for="keywordThreshold" class="block text-xs font-medium text-gray-700 mb-1">
-                                        Max Count
-                                    </label>
-                                    <input 
-                                        id="keywordThreshold" 
-                                        type="number" 
-                                        min="0" 
-                                        value="5"
-                                        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
-                                    >
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label for="keywordMinThreshold" class="block text-xs font-medium text-gray-700 mb-1">
+                                            Min Count
+                                        </label>
+                                        <input 
+                                            id="keywordMinThreshold" 
+                                            type="number" 
+                                            min="0" 
+                                            value="0"
+                                            class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
+                                        >
+                                    </div>
+                                    <div>
+                                        <label for="keywordThreshold" class="block text-xs font-medium text-gray-700 mb-1">
+                                            Max Count
+                                        </label>
+                                        <input 
+                                            id="keywordThreshold" 
+                                            type="number" 
+                                            min="0" 
+                                            value="5"
+                                            class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80"
+                                        >
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="keywordEnabled" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="keywordEnabled" class="ml-3 text-sm text-gray-700 font-medium">
-                                    Enable this filter
-                                </label>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="keywordEnabled" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="keywordEnabled" class="ml-3 text-sm text-gray-700 font-medium">
+                                        Enable this filter
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Filter 3: Price Level -->
-                    <div class="mb-8 p-4 bg-white/50 rounded-xl border border-white/30">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                                </svg>
+                    <div class="mb-4 p-4 bg-white/50 rounded-xl border border-white/30 filter-section">
+                        <div class="flex items-center justify-between cursor-pointer filter-header" onclick="toggleFilter('priceLevel')">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-800">Price Level</h3>
                             </div>
-                            <h3 class="text-sm font-semibold text-gray-800">Price Level</h3>
+                            <svg class="w-4 h-4 text-gray-500 transform transition-transform filter-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                        <p class="text-xs text-gray-600 mb-4">Filter by price range (1-4 scale)</p>
-                        <div class="space-y-3">
-                            <div>
-                                <label for="priceLevelMin" class="block text-xs font-medium text-gray-700 mb-1">
-                                    Minimum Price
-                                </label>
-                                <select 
-                                    id="priceLevelMin" 
-                                    class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80 select-custom"
-                                >
-                                    <option value="0">Any Price</option>
-                                    <option value="1">💰 Inexpensive</option>
-                                    <option value="2">💰💰 Moderate</option>
-                                    <option value="3">💰💰💰 Expensive</option>
-                                    <option value="4">💰💰💰💰 Very Expensive</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="priceLevelMax" class="block text-xs font-medium text-gray-700 mb-1">
-                                    Maximum Price
-                                </label>
-                                <select 
-                                    id="priceLevelMax" 
-                                    class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80 select-custom"
-                                >
-                                    <option value="0">Any Price</option>
-                                    <option value="1">💰 Inexpensive</option>
-                                    <option value="2">💰💰 Moderate</option>
-                                    <option value="3">💰💰💰 Expensive</option>
-                                    <option value="4">💰💰💰💰 Very Expensive</option>
-                                </select>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="priceLevelEnabled" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="priceLevelEnabled" class="ml-3 text-sm text-gray-700 font-medium">
-                                    Enable this filter
-                                </label>
+                        <div class="filter-content hidden mt-4">
+                            <p class="text-xs text-gray-600 mb-4">Filter by price range (1-4 scale)</p>
+                            <div class="space-y-3">
+                                <div>
+                                    <label for="priceLevelMin" class="block text-xs font-medium text-gray-700 mb-1">
+                                        Minimum Price
+                                    </label>
+                                    <select 
+                                        id="priceLevelMin" 
+                                        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80 select-custom"
+                                    >
+                                        <option value="0">Any Price</option>
+                                        <option value="1">💰 Inexpensive</option>
+                                        <option value="2">💰💰 Moderate</option>
+                                        <option value="3">💰💰💰 Expensive</option>
+                                        <option value="4">💰💰💰💰 Very Expensive</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="priceLevelMax" class="block text-xs font-medium text-gray-700 mb-1">
+                                        Maximum Price
+                                    </label>
+                                    <select 
+                                        id="priceLevelMax" 
+                                        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80 select-custom"
+                                    >
+                                        <option value="0">Any Price</option>
+                                        <option value="1">💰 Inexpensive</option>
+                                        <option value="2">💰💰 Moderate</option>
+                                        <option value="3">💰💰💰 Expensive</option>
+                                        <option value="4">💰💰💰💰 Very Expensive</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="priceLevelEnabled" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="priceLevelEnabled" class="ml-3 text-sm text-gray-700 font-medium">
+                                        Enable this filter
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Filter 4: Place Types -->
-                    <div class="mb-8 p-4 bg-white/50 rounded-xl border border-white/30">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                                </svg>
+                    <div class="mb-4 p-4 bg-white/50 rounded-xl border border-white/30 filter-section">
+                        <div class="flex items-center justify-between cursor-pointer filter-header" onclick="toggleFilter('placeTypes')">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-800">Place Types</h3>
                             </div>
-                            <h3 class="text-sm font-semibold text-gray-800">Place Types</h3>
+                            <svg class="w-4 h-4 text-gray-500 transform transition-transform filter-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                        <p class="text-xs text-gray-600 mb-4">Select types of places to search for</p>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeRestaurant" 
-                                    type="checkbox" 
-                                    checked
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeRestaurant" class="ml-3 text-sm text-gray-700 font-medium">
-                                    🍽️ Restaurant
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeCafe" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeCafe" class="ml-3 text-sm text-gray-700 font-medium">
-                                    ☕ Cafe
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeBar" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeBar" class="ml-3 text-sm text-gray-700 font-medium">
-                                    🍺 Bar
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeBakery" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeBakery" class="ml-3 text-sm text-gray-700 font-medium">
-                                    🥖 Bakery
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeFood" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeFood" class="ml-3 text-sm text-gray-700 font-medium">
-                                    🍕 Food (General)
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeHotel" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeHotel" class="ml-3 text-sm text-gray-700 font-medium">
-                                    🏨 Hotel
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <input 
-                                    id="typeLodging" 
-                                    type="checkbox" 
-                                    class="checkbox-custom"
-                                >
-                                <label for="typeLodging" class="ml-3 text-sm text-gray-700 font-medium">
-                                    🏠 Lodging
-                                </label>
+                        <div class="filter-content hidden mt-4">
+                            <p class="text-xs text-gray-600 mb-4">Select types of places to search for</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeRestaurant" 
+                                        type="checkbox" 
+                                        checked
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeRestaurant" class="ml-3 text-sm text-gray-700 font-medium">
+                                        🍽️ Restaurant
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeCafe" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeCafe" class="ml-3 text-sm text-gray-700 font-medium">
+                                        ☕ Cafe
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeBar" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeBar" class="ml-3 text-sm text-gray-700 font-medium">
+                                        🍺 Bar
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeBakery" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeBakery" class="ml-3 text-sm text-gray-700 font-medium">
+                                        🥖 Bakery
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeFood" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeFood" class="ml-3 text-sm text-gray-700 font-medium">
+                                        🍕 Food (General)
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeHotel" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeHotel" class="ml-3 text-sm text-gray-700 font-medium">
+                                        🏨 Hotel
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input 
+                                        id="typeLodging" 
+                                        type="checkbox" 
+                                        class="checkbox-custom"
+                                    >
+                                    <label for="typeLodging" class="ml-3 text-sm text-gray-700 font-medium">
+                                        🏠 Lodging
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Filter 5: Sorting -->
-                    <div class="mb-8 p-4 bg-white/50 rounded-xl border border-white/30">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
-                                </svg>
+                    <div class="mb-4 p-4 bg-white/50 rounded-xl border border-white/30 filter-section">
+                        <div class="flex items-center justify-between cursor-pointer filter-header" onclick="toggleFilter('sorting')">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-800">Sort Results</h3>
                             </div>
-                            <h3 class="text-sm font-semibold text-gray-800">Sort Results</h3>
+                            <svg class="w-4 h-4 text-gray-500 transform transition-transform filter-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                        <p class="text-xs text-gray-600 mb-4">Choose how to sort the places</p>
-                        <div class="space-y-3">
-                            <div>
-                                <label for="sortBy" class="block text-xs font-medium text-gray-700 mb-1">
-                                    Sort By
-                                </label>
-                                <select 
-                                    id="sortBy" 
-                                    class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80 select-custom"
-                                >
-                                    <option value="name">📝 Name (A-Z)</option>
-                                    <option value="name-desc">📝 Name (Z-A)</option>
-                                    <option value="rating">⭐ Rating (High to Low)</option>
-                                    <option value="rating-asc">⭐ Rating (Low to High)</option>
-                                    <option value="weighted-rating">🏆 Weighted Rating (High to Low)</option>
-                                    <option value="weighted-rating-asc">🏆 Weighted Rating (Low to High)</option>
-                                    <option value="review-count">📊 Review Count (High to Low)</option>
-                                    <option value="review-count-asc">📊 Review Count (Low to High)</option>
-                                    <option value="keyword-count">🔍 Keyword Count (High to Low)</option>
-                                    <option value="keyword-count-asc">🔍 Keyword Count (Low to High)</option>
-                                    <option value="price-level">💰 Price Level (High to Low)</option>
-                                    <option value="price-level-asc">💰 Price Level (Low to High)</option>
-                                    <option value="distance">📍 Distance (Nearest First)</option>
-                                </select>
+                        <div class="filter-content hidden mt-4">
+                            <p class="text-xs text-gray-600 mb-4">Choose how to sort the places</p>
+                            <div class="space-y-3">
+                                <div>
+                                    <label for="sortBy" class="block text-xs font-medium text-gray-700 mb-1">
+                                        Sort By
+                                    </label>
+                                    <select 
+                                        id="sortBy" 
+                                        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 input-focus bg-white/80 select-custom"
+                                    >
+                                        <option value="name">📝 Name (A-Z)</option>
+                                        <option value="name-desc">📝 Name (Z-A)</option>
+                                        <option value="rating">⭐ Rating (High to Low)</option>
+                                        <option value="rating-asc">⭐ Rating (Low to High)</option>
+                                        <option value="weighted-rating">🏆 Weighted Rating (High to Low)</option>
+                                        <option value="weighted-rating-asc">🏆 Weighted Rating (Low to High)</option>
+                                        <option value="review-count">📊 Review Count (High to Low)</option>
+                                        <option value="review-count-asc">📊 Review Count (Low to High)</option>
+                                        <option value="keyword-count">🔍 Keyword Count (High to Low)</option>
+                                        <option value="keyword-count-asc">🔍 Keyword Count (Low to High)</option>
+                                        <option value="price-level">💰 Price Level (High to Low)</option>
+                                        <option value="price-level-asc">💰 Price Level (Low to High)</option>
+                                        <option value="distance">📍 Distance (Nearest First)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

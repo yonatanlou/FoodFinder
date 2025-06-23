@@ -271,6 +271,7 @@ class UIManager {
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center">
                                         <span class="text-xs text-yellow-600 mr-1">${stars}</span>
+                                        <span class="text-xs font-medium text-gray-700 mr-1">${rating.toFixed(1)}</span>
                                         <span class="text-xs text-gray-600">(${place.user_ratings_total || 0})</span>
                                     </div>
                                     <span class="text-xs text-gray-500">${priceLevelText}</span>
@@ -398,46 +399,62 @@ class UIManager {
     }
 
     showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            padding: 16px 24px;
-            border-radius: 16px;
-            z-index: 1000;
-            font-weight: 600;
-            max-width: 80%;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: slideUp 0.3s ease-out;
-        `;
-        errorDiv.innerHTML = `
-            <div class="flex items-center justify-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                ${message}
-            </div>
-        `;
-        document.body.appendChild(errorDiv);
-        
-        // Remove error after 8 seconds
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.style.animation = 'fadeOut 0.3s ease-out';
-                setTimeout(() => {
-                    if (errorDiv.parentNode) {
-                        errorDiv.parentNode.removeChild(errorDiv);
-                    }
-                }, 300);
+        try {
+            // Create or update error notification
+            let errorDiv = document.getElementById('errorNotification');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'errorNotification';
+                errorDiv.className = 'fixed top-4 right-4 z-50 max-w-sm';
+                document.body.appendChild(errorDiv);
             }
-        }, 8000);
+            
+            errorDiv.innerHTML = `
+                <div class="bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl border border-red-400/20 transform transition-all duration-300 animate-slide-in">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-6 h-6 bg-red-400 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-sm">Error</h4>
+                            <p class="text-sm opacity-90">${message}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+            
+        } catch (error) {
+            console.error('Error showing error notification:', error);
+        }
+    }
+
+    // Toggle filter sections
+    toggleFilter(filterId) {
+        try {
+            const filterSection = document.querySelector(`[onclick="toggleFilter('${filterId}')"]`).closest('.filter-section');
+            const content = filterSection.querySelector('.filter-content');
+            const arrow = filterSection.querySelector('.filter-arrow');
+            
+            // Toggle visibility
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        } catch (error) {
+            console.error('Error toggling filter:', error);
+        }
     }
 }
 
@@ -445,3 +462,13 @@ class UIManager {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = UIManager;
 }
+
+// Make toggleFilter available globally
+window.toggleFilter = function(filterId) {
+    // This will be called from HTML onclick handlers
+    // The actual implementation is in the UIManager class
+    // We'll need to access the UI manager instance
+    if (window.app && window.app.uiManager) {
+        window.app.uiManager.toggleFilter(filterId);
+    }
+};
